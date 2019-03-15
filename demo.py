@@ -64,7 +64,7 @@ def test_simple(model):
 
     # MES change - output filename
     infile_parts = img_path.split('.')
-    output_image_path = infile_parts[0] + '_out_rgb.png'
+    output_image_path = infile_parts[0] + '_out_rgb_van.png'
 
     # MES:  save using PIL
     output_im.save(output_image_path)

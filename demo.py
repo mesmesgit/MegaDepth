@@ -13,6 +13,8 @@ from data.data_loader import CreateDataLoader
 from models.models import create_model
 from skimage import io
 from skimage.transform import resize
+# MES additions
+from skimage import color
 
 
 # img_path = 'demo.jpg'
@@ -30,7 +32,8 @@ def test_simple(model):
     print("============================= TEST ============================")
     model.switch_to_eval()
 
-    img = np.float32(io.imread(img_path))/255.0
+    # img = np.float32(io.imread(img_path))/255.0
+    img = np.float32(color.rgba2rgb(io.imread(img_path)))/255.0
     img = resize(img, (input_height, input_width), order = 1)
     input_img =  torch.from_numpy( np.transpose(img, (2,0,1)) ).contiguous().float()
     input_img = input_img.unsqueeze(0)

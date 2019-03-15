@@ -15,7 +15,8 @@ from skimage import io
 from skimage.transform import resize
 
 
-img_path = 'demo.jpg'
+# img_path = 'demo.jpg'
+img_path = '10-40-66-0-10-2.png'
 
 model = create_model(opt)
 
@@ -24,7 +25,7 @@ input_width  = 512
 
 
 def test_simple(model):
-    total_loss =0 
+    total_loss =0
     toal_count = 0
     print("============================= TEST ============================")
     model.switch_to_eval()
@@ -35,7 +36,7 @@ def test_simple(model):
     input_img = input_img.unsqueeze(0)
 
     input_images = Variable(input_img.cuda() )
-    pred_log_depth = model.netG.forward(input_images) 
+    pred_log_depth = model.netG.forward(input_images)
     pred_log_depth = torch.squeeze(pred_log_depth)
 
     pred_depth = torch.exp(pred_log_depth)

@@ -18,7 +18,7 @@ from skimage import color
 
 
 # img_path = 'demo.jpg'
-img_path = '10-40-66-0-10-2.png'
+img_path = '10-40-66-0-197-2.png'
 
 model = create_model(opt)
 

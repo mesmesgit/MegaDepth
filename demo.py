@@ -16,6 +16,7 @@ from skimage.transform import resize
 # MES additions
 from skimage import color
 import matplotlib.pyplot as plt
+from PIL import Image
 
 
 # img_path = 'demo.jpg'
@@ -54,12 +55,22 @@ def test_simple(model):
 
     # MES change - convert grayscale to RGB
     # pred_inv_depth = color.gray2rgb(pred_inv_depth)
+    # Normalize
+    output_image = pred_inv_depth.astype(np.float32) # convert to float
+    output_image -= output_image.min() # ensure the minimal value is 0.0
+    output_image /= output_image.max() # maximum value in image is now 1.0
+    # create RGB image, applying colormap
+    output_im = Image.fromarray(np.uint8(plt.cm.nipy_spectral(output_image)*255))
 
     # MES change - output filename
     infile_parts = img_path.split('.')
     output_image_path = infile_parts[0] + '_out_rgb.png'
 
-    io.imsave(output_image_path, pred_inv_depth, cmap=plt.cm.nipy_spectral)
+    # MES:  save using PIL
+    output_im.save(output_image_path)
+
+    # original image save code
+    # io.imsave(output_image_path, pred_inv_depth)
     # print(pred_inv_depth.shape)
     sys.exit()
 

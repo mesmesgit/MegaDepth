@@ -51,7 +51,14 @@ def test_simple(model):
     # you might also use percentile for better visualization
     pred_inv_depth = pred_inv_depth/np.amax(pred_inv_depth)
 
-    io.imsave('demo.png', pred_inv_depth)
+    # MES change - convert grayscale to RGB
+    pred_inv_depth = color.gray2rgb(pred_inv_depth)
+
+    # MES change - output filename
+    infile_parts = img_path.split('.')
+    output_image_path = infile_parts[0] + '_out_rgb.png'
+
+    io.imsave(output_image_path, pred_inv_depth)
     # print(pred_inv_depth.shape)
     sys.exit()
 

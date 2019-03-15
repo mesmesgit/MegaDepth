@@ -15,7 +15,8 @@ class HGModel(BaseModel):
 
         print("===========================================LOADING Hourglass NETWORK====================================================")
         model = pytorch_DIW_scratch.pytorch_DIW_scratch
-        model= torch.nn.parallel.DataParallel(model, device_ids = [0,1])
+        # model= torch.nn.parallel.DataParallel(model, device_ids = [0,1])
+        model= torch.nn.parallel.DataParallel(model, device_ids = [1])
         # model_parameters = self.load_network(model, 'G', 'best_vanila')
         model_parameters = self.load_network(model, 'G', 'best_generalization')
         model.load_state_dict(model_parameters)
@@ -36,7 +37,7 @@ class HGModel(BaseModel):
         diff = estimated_labels - ground_truth
         diff[diff != 0] = 1
 
-        # error 
+        # error
         inequal_error_count = diff[ground_truth != 0]
         inequal_error_count =  torch.sum(inequal_error_count)
 
@@ -46,7 +47,7 @@ class HGModel(BaseModel):
         equal_error_count = error_count - inequal_error_count
 
 
-        # total 
+        # total
         total_count = depth_ratio.size(0)
         ground_truth[ground_truth !=0 ] = 1
 
@@ -57,11 +58,11 @@ class HGModel(BaseModel):
         error_list = [equal_error_count, inequal_error_count, error_count]
         count_list = [equal_total_count, inequal_count_total, total_count]
 
-        return error_list, count_list 
+        return error_list, count_list
 
 
     def computeSDR(self, prediction_d, targets):
-        #  for each image 
+        #  for each image
         total_error = [0,0,0]
         total_samples = [0,0,0]
 
@@ -69,7 +70,7 @@ class HGModel(BaseModel):
 
             if targets['has_SfM_feature'][i] == False:
                 continue
-            
+
             x_A_arr = targets["sdr_xA"][i].squeeze(0)
             x_B_arr = targets["sdr_xB"][i].squeeze(0)
             y_A_arr = targets["sdr_yA"][i].squeeze(0)
@@ -99,7 +100,7 @@ class HGModel(BaseModel):
 
     def evaluate_SDR(self, input_, targets):
         input_images = Variable(input_.cuda() )
-        prediction_d = self.netG.forward(input_images) 
+        prediction_d = self.netG.forward(input_images)
 
         total_error, total_samples = self.computeSDR(prediction_d.data, targets)
 
@@ -109,9 +110,9 @@ class HGModel(BaseModel):
         N = torch.sum(mask)
         log_d_diff = log_prediction_d - log_gt
         log_d_diff = torch.mul(log_d_diff, mask)
-        s1 = torch.sum( torch.pow(log_d_diff,2) )/N 
+        s1 = torch.sum( torch.pow(log_d_diff,2) )/N
 
-        s2 = torch.pow(torch.sum(log_d_diff),2)/(N*N)  
+        s2 = torch.pow(torch.sum(log_d_diff),2)/(N*N)
         data_loss = s1 - s2
 
         data_loss = torch.sqrt(data_loss)
@@ -119,14 +120,14 @@ class HGModel(BaseModel):
         return data_loss
 
     def evaluate_RMSE(self, input_images, prediction_d, targets):
-        count = 0            
+        count = 0
         total_loss = Variable(torch.cuda.FloatTensor(1))
         total_loss[0] = 0
         mask_0 = Variable(targets['mask_0'].cuda(), requires_grad = False)
         d_gt_0 = torch.log(Variable(targets['gt_0'].cuda(), requires_grad = False))
 
         for i in range(0, mask_0.size(0)):
- 
+
             total_loss +=  self.rmse_Loss(prediction_d[i,:,:], mask_0[i,:,:], d_gt_0[i,:,:])
             count += 1
 
@@ -135,7 +136,7 @@ class HGModel(BaseModel):
 
     def evaluate_sc_inv(self, input_, targets):
         input_images = Variable(input_.cuda() )
-        prediction_d = self.netG.forward(input_images) 
+        prediction_d = self.netG.forward(input_images)
         rmse_loss , count= self.evaluate_RMSE(input_images, prediction_d, targets)
 
         return rmse_loss, count
@@ -146,4 +147,3 @@ class HGModel(BaseModel):
 
     def switch_to_eval(self):
         self.netG.eval()
-

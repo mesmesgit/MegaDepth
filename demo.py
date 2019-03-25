@@ -20,7 +20,8 @@ from PIL import Image
 
 
 # img_path = 'demo.jpg'
-img_path = '00024259.jpg'
+# img_path = '00024259.jpg'
+img_path = '10-40-66-0-10-2.png'
 
 model = create_model(opt)
 

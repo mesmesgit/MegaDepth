@@ -29,11 +29,17 @@ from skimage.transform import resize
 platform_rootpath = '/home/dockeruser/Documents/AVCES/'
 pspnetpath = os.path.join(platform_rootpath, 'pspnet-pytorch/')
 config = os.path.join(pspnetpath, 'config/ade20k.yaml')
-image_path = os.path.join(platform_rootpath, 'MegaDepth/docs/vertical-street.jpg')
+# image_path = os.path.join(platform_rootpath, 'MegaDepth/docs/vertical-street.jpg')
+run_string = '1-25-63-0'
+exno = 80
+input_image_string = 'imdata/pcs/dash/DASH/Coll/' + run_string + '-' + str(exno) + '-2.png'
+image_path = os.path.join(platform_rootpath, input_image_string)
 cuda = True
 crf = True
 # out_class_figure = 'docs/demo_out.png'
-# out_masked_sky_image = 'docs/image-sky-masked.png'
+#
+copy_orig_image = 'docs/image-in.png'
+out_masked_sky_image = 'docs/image-sky-masked.png'
 out_depth_image = 'docs/image-depth-out.png'
 #
 # ---- perform semantic segmentation using pspnet-pytorch ----
@@ -41,7 +47,7 @@ out_depth_image = 'docs/image-depth-out.png'
 #  run semantic segmentation and get the masked image
 masked_image = semseg.semseg(pspnetpath, config, image_path, cuda, crf)
 # save the masked image
-# plt.imsave(out_masked_sky_image, masked_image)
+plt.imsave(out_masked_sky_image, masked_image)
 #
 # ---- perform depth estimation with MegaDepth ----
 #
@@ -84,4 +90,6 @@ output_image -= output_image.min() # ensure the minimal value is 0.0
 output_image /= output_image.max() # maximum value in image is now 1.0
 # save the depth image
 #   color map candidates:  'nipy_spectral', 'jet', 'plasma', 'viridis'
+input_image = plt.imread(image_path)
+plt.imsave(copy_orig_image, input_image)
 plt.imsave(out_depth_image, output_image, cmap='plasma')

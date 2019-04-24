@@ -8,7 +8,9 @@ import matplotlib as mpl
 mpl.use('Agg')
 #
 import matplotlib.pyplot as plt
-from ../pspnet-pytorch/semseg import semseg
+import sys
+sys.path.insert(0, '../pspnet-pytorch')
+import semseg
 #
 # set the input image filename
 # set the output image filenames

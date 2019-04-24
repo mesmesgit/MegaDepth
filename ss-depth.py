@@ -73,11 +73,7 @@ pred_depth = torch.exp(pred_log_depth)
 
 # visualize prediction using inverse depth, so that we don't need sky segmentation (if you want to use RGB map for visualization, \
 # you have to run semantic segmentation to mask the sky first since the depth of sky is random from CNN)
-
-# MES change, since we are doing semantic segmentation
-# pred_inv_depth = 1/pred_depth
-pred_inv_depth = pred_depth
-
+pred_inv_depth = 1.0/pred_depth
 pred_inv_depth = pred_inv_depth.data.cpu().numpy()
 # you might also use percentile for better visualization
 pred_inv_depth = pred_inv_depth/np.amax(pred_inv_depth)
@@ -87,4 +83,5 @@ output_image = pred_inv_depth.astype(np.float32) # convert to float
 output_image -= output_image.min() # ensure the minimal value is 0.0
 output_image /= output_image.max() # maximum value in image is now 1.0
 # save the depth image
-plt.imsave(out_depth_image, output_image, cmap='nipy_spectral')
+#   color map candidates:  'nipy_spectral', 'jet', 'plasma', 'viridis'
+plt.imsave(out_depth_image, output_image, cmap='plasma')

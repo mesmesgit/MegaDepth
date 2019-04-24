@@ -53,8 +53,8 @@ plt.imsave(out_masked_sky_image, masked_image)
 #
 model = create_model(opt)
 
-input_height = 384
-input_width  = 512
+input_height = 256
+input_width  = 256
 
 total_loss =0
 toal_count = 0

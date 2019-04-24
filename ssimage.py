@@ -21,7 +21,7 @@ crf = True
 # out_class_figure = 'docs/demo_out.png'
 out_masked_sky_image = 'docs/image-sky-masked.png'
 # run semantic segmentation and get the masked image
-masked_image = semseg(config, image_path, cuda, crf)
+masked_image = semseg.semseg(config, image_path, cuda, crf)
 # save the masked image
 plt.imsave(out_masked_sky_image, masked_image)
 #

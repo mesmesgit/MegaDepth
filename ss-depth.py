@@ -97,4 +97,4 @@ output_image /= output_image.max() # maximum value in image is now 1.0
 input_image = plt.imread(image_path)
 plt.imsave(copy_orig_image, input_image)
 # plt.imsave(out_depth_image, output_image, cmap='plasma')
-plt.imsave(out_depth_image, pred_inv_depth, cmap='gray')
+plt.imsave(out_depth_image, pred_inv_depth, cmap='nipy_spectral')

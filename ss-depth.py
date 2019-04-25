@@ -22,6 +22,7 @@ opt = TrainOptions().parse()  # set CUDA_VISIBLE_DEVICES before import torch
 from models.models import create_model
 from skimage import io
 from skimage.transform import resize
+import cv2
 
 #
 # set the input image filename
@@ -36,18 +37,26 @@ input_image_string = 'imdata/pcs/dash/DASH/Coll/' + run_string + '-' + str(exno)
 image_path = os.path.join(platform_rootpath, input_image_string)
 cuda = True
 crf = True
-# out_class_figure = 'docs/demo_out.png'
-#
+out_class_figure = 'MegaDepth/docs/figure-semseg-classes.png'
+out_class_figure = os.path.join(platform_rootpath, out_class_figure)
 copy_orig_image = 'docs/image-in.png'
 out_masked_sky_image = 'docs/image-sky-masked.png'
 out_depth_image = 'docs/image-depth-out.png'
+run_semseg = True
 #
-# ---- perform semantic segmentation using pspnet-pytorch ----
-#
-#  run semantic segmentation and get the masked image
-masked_image = semseg.semseg(pspnetpath, config, image_path, cuda, crf)
-# save the masked image
-plt.imsave(out_masked_sky_image, masked_image)
+if run_semseg:
+    # ---- perform semantic segmentation using pspnet-pytorch ----
+    #
+    #  run semantic segmentation and get the masked image
+    masked_image = semseg.semseg(pspnetpath, config, image_path, cuda, crf, out_class_figure)
+    # save the masked image
+    plt.imsave(out_masked_sky_image, masked_image)
+    # set the input to MegaDepth
+    img_md_in = masked_image
+else:
+    # set the input to MegaDepth
+    img_md_in = cv2.imread(image_path, cv2.IMREAD_COLOR)
+    img_md_in = cv2.cvtColor(img_md_in, cv2.COLOR_BGR2RGB)
 #
 # ---- perform depth estimation with MegaDepth ----
 #
@@ -56,7 +65,7 @@ model = create_model(opt)
 input_height = 256
 input_width  = 256
 
-total_loss =0
+total_loss = 0
 toal_count = 0
 # print("============================= TEST ============================")
 model.switch_to_eval()
@@ -65,7 +74,7 @@ model.switch_to_eval()
 # img = np.float32(color.rgba2rgb(io.imread(img_path)))/255.0
 
 # MES set img to output of semantic segmentation, masking
-img = masked_image
+img = img_md_in
 #
 img = resize(img, (input_height, input_width), order = 1)
 #

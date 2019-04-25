@@ -22,7 +22,6 @@ opt = TrainOptions().parse()  # set CUDA_VISIBLE_DEVICES before import torch
 from models.models import create_model
 from skimage import io
 from skimage.transform import resize
-import cv2
 
 #
 # set the input image filename
@@ -66,11 +65,9 @@ model.switch_to_eval()
 # img = np.float32(color.rgba2rgb(io.imread(img_path)))/255.0
 
 # MES set img to output of semantic segmentation, masking
-# img = masked_image
-img = cv2.imread(image_path, cv2.IMREAD_COLOR).astype(float)
+img = masked_image
 #
-# img = resize(img, (input_height, input_width), order = 1)
-img = cv2.resize(img, (input_height, input_width))
+img = resize(img, (input_height, input_width), order = 1)
 #
 input_img =  torch.from_numpy( np.transpose(img, (2,0,1)) ).contiguous().float()
 input_img = input_img.unsqueeze(0)

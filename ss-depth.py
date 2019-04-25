@@ -46,6 +46,8 @@ out_depth_image = 'docs/image-depth-out.png'
 #
 #  run semantic segmentation and get the masked image
 masked_image = semseg.semseg(pspnetpath, config, image_path, cuda, crf)
+# transpose the channels
+masked_image = np.transpose(masked_image, (2,0,1))
 # save the masked image
 plt.imsave(out_masked_sky_image, masked_image)
 #

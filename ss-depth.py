@@ -67,6 +67,7 @@ model.switch_to_eval()
 # MES set img to output of semantic segmentation, masking
 # img = masked_image
 img = plt.imread(image_path)
+img = img[..., ::-1]
 
 img = resize(img, (input_height, input_width), order = 1)
 input_img =  torch.from_numpy( np.transpose(img, (2,0,1)) ).contiguous().float()

@@ -29,8 +29,8 @@ import cv2
 # set the output image filenames
 platform_rootpath = '/home/dockeruser/Documents/AVCES/'
 pspnetpath = os.path.join(platform_rootpath, 'pspnet-pytorch/')
-# config = os.path.join(pspnetpath, 'config/ade20k.yaml')
-config = os.path.join(pspnetpath, 'config/cityscapes.yaml')
+config = os.path.join(pspnetpath, 'config/ade20k.yaml')
+# config = os.path.join(pspnetpath, 'config/cityscapes.yaml')
 # image_path = os.path.join(platform_rootpath, 'MegaDepth/docs/vertical-street.jpg')
 run_string = '1-25-63-0'
 exno = 85

@@ -12,7 +12,7 @@ import numpy as np
 import cv2
 # import pylab as plt
 # import conv_rgba_rgb
-import .get-depth-from-image
+import get-depth-from-image
 #
 #  MAIN PROGRAM
 #

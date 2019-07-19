@@ -12,7 +12,7 @@ import numpy as np
 import cv2
 # import pylab as plt
 # import conv_rgba_rgb
-import get-depth-from-image
+import depthImage
 #
 #  MAIN PROGRAM
 #
@@ -77,7 +77,7 @@ def main():
             rgbPath = os.path.join(videoPath, "Run/rgb{0:06d}.png".format(count))
             cv2.imwrite(rgbPath, frame)
             #  create the depth image
-            get-depth-from-image.generate_depth_image(rgbPath)
+            depthImage.generate_depth_image(rgbPath)
             #
         except:
             print("End of video file reached.")

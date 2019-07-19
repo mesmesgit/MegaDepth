@@ -12,6 +12,7 @@ import numpy as np
 import cv2
 # import pylab as plt
 # import conv_rgba_rgb
+import get-depth-from-image
 #
 #  MAIN PROGRAM
 #
@@ -70,11 +71,13 @@ def main():
         try:
             #  read a frame from the video
             ret, frame = cap.read()
-            # resize the frame to 256 x 144 (16:9 aspect ratio)
-            frame = cv2.resize(frame, (256, 144), interpolation = cv2.INTER_LANCZOS4)
+            # resize the frame to 512 x 384 for MegaDepth
+            frame = cv2.resize(frame, (512, 384), interpolation = cv2.INTER_LANCZOS4)
             #  write the frame to file
             rgbPath = os.path.join(videoPath, "Run/rgb{0:06d}.png".format(count))
             cv2.imwrite(rgbPath, frame)
+            #  create the depth image
+            get-depth-from-image.generate_depth_image(rgbPath)
             #
         except:
             print("End of video file reached.")

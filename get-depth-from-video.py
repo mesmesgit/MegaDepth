@@ -13,6 +13,9 @@ import cv2
 # import pylab as plt
 # import conv_rgba_rgb
 import depthImage
+import sys
+sys.path.insert(0, '../pspnet-pytorch/')
+import semseg
 #
 #  MAIN PROGRAM
 #
@@ -64,6 +67,10 @@ def main():
     run_id = 'yt1_001'
     videoPath = os.path.join(rootPath, "imdata/video/" + run_id + "/")
     video_filename = os.path.join(videoPath, "zz688.mp4")
+    pspnetpath = os.path.join(rootPath, 'pspnet-pytorch/')
+    pspnetconfig = os.path.join(pspnetpath, 'config/ade20k.yaml')
+    out_class_figure = os.path.join(videoPath, "Run/semseg_out_figure.png")
+    run_semseg = True
     #  run in a loop from the video
     cap = cv2.VideoCapture(video_filename)
     count = 1
@@ -73,11 +80,23 @@ def main():
             ret, frame = cap.read()
             # resize the frame to 512 x 384 for MegaDepth
             frame = cv2.resize(frame, (512, 384), interpolation = cv2.INTER_LANCZOS4)
-            #  write the frame to file
+            #  write the rgb frame to file
             rgbPath = os.path.join(videoPath, "Run/rgb{0:06d}.png".format(count))
             cv2.imwrite(rgbPath, frame)
+            #  perform semantic segmentation, if desired
+            if run_semseg:
+                # ---- perform semantic segmentation using pspnet-pytorch ----
+                #  run semantic segmentation and get the masked image
+                masked_image = semseg.semseg(pspnetpath, pspnetconfig, rgbPath, True, True, out_class_figure)
+                # save the masked image
+                masked_image_path = os.path.join(videoPath, "Run/masked{0:06d}.png".format(count))
+                plt.imsave(masked_image_path, masked_image)
+                # set the input to MegaDepth
+                img_md_in = masked_image_path
+            else:
+                img_md_in = rgbPath
             #  create the depth image
-            depthImage.generate_depth_image(rgbPath)
+            depthImage.generate_depth_image(img_md_in)
             #
         except:
             print("End of video file reached.")

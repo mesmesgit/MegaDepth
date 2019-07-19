@@ -90,7 +90,7 @@ def main():
     #  end of while loop for processing video frames
     #
     #  write the runparams file
-    run_params_filename = os.path.join(videoPath, "run_params.npz")
+    run_params_filename = os.path.join(videoPath, "run_params_depth.npz")
     num_frames = count - 1
     print("run_params_filename is: ", run_params_filename)
     print("run_id is: ", run_id)

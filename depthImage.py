@@ -14,9 +14,9 @@ from models.models import create_model
 from skimage import io
 from skimage.transform import resize
 # MES additions
-from skimage import color
-import matplotlib.pyplot as plt
-from PIL import Image
+# from skimage import color
+# import matplotlib.pyplot as plt
+# from PIL import Image
 
 
 # img_path = 'demo.jpg'

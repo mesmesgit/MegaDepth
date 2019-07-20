@@ -88,11 +88,14 @@ def main():
                 # ---- perform semantic segmentation using pspnet-pytorch ----
                 #  run semantic segmentation and get the masked image
                 masked_image = semseg.semseg(pspnetpath, pspnetconfig, rgbPath, True, True, out_class_figure)
-                # save the masked image
-                masked_image_path = os.path.join(videoPath, "Run/masked{0:06d}.png".format(count))
-                plt.imsave(masked_image_path, masked_image)
-                # set the input to MegaDepth
-                img_md_in = masked_image_path
+                # save the masked image, if 'sky' pixels found in image 
+                if masked_image:
+                    masked_image_path = os.path.join(videoPath, "Run/masked{0:06d}.png".format(count))
+                    cv2.imwrite(masked_image_path, masked_image)
+                    # set the input to MegaDepth
+                    img_md_in = masked_image_path
+                else:
+                    img_md_in = rgbPath
             else:
                 img_md_in = rgbPath
             #  create the depth image

@@ -87,6 +87,7 @@ def main():
             rgbPath = os.path.join(videoPath, "Run/rgb{0:06d}.png".format(count))
             cv2.imwrite(rgbPath, frame)
             sys.stdout.flush()
+            print("rgb file written to disk")
             #  perform semantic segmentation, if desired
             if run_semseg:
                 # ---- perform semantic segmentation using pspnet-pytorch ----

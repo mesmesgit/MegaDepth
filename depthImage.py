@@ -25,14 +25,14 @@ from skimage.transform import resize
 
 model = create_model(opt)
 
-input_height = 384
+input_height = 288
 input_width  = 512
 
 
 def generate_depth_image(img_path, model=model):
     # make sure model is ready for depth evaluation (not training)
     model.switch_to_eval()
-    # read in the input image 
+    # read in the input image
     img = np.float32(io.imread(img_path))/255.0
     # img = np.float32(color.rgba2rgb(io.imread(img_path)))/255.0
     img = resize(img, (input_height, input_width), order = 1)

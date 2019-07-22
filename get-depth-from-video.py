@@ -94,17 +94,17 @@ def main():
                 #  run semantic segmentation and get the masked image
                 masked_image = semseg.semseg(pspnetpath, pspnetconfig, rgbPath, True, True, out_class_figure)
                 print("call to semseg() is complete")
-                # save the masked image, if 'sky' pixels found in image
-                if masked_image != None:
-                    print("masked image returned by semseg()")
+                # save and use the masked image, if possible
+                try:
+                    print("creating masked image")
                     masked_image_path = os.path.join(videoPath, "Run/masked{0:06d}.png".format(count))
                     cv2.imwrite(masked_image_path, masked_image)
                     sys.stdout.flush()
                     print("masked image written to disk")
                     # set the input to MegaDepth
                     img_md_in = masked_image_path
-                else:
-                    print("no masked image returned by semseg()")
+                except:
+                    print("error creating masked image, using rgb image")
                     img_md_in = rgbPath
             else:
                 print("semantic segmentation not requested, using rgb image")

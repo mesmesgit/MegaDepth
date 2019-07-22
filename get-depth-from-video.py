@@ -95,7 +95,7 @@ def main():
                 masked_image = semseg.semseg(pspnetpath, pspnetconfig, rgbPath, True, True, out_class_figure)
                 print("call to semseg() is complete")
                 # save the masked image, if 'sky' pixels found in image
-                if masked_image:
+                if masked_image != None:
                     print("masked image returned by semseg()")
                     masked_image_path = os.path.join(videoPath, "Run/masked{0:06d}.png".format(count))
                     cv2.imwrite(masked_image_path, masked_image)

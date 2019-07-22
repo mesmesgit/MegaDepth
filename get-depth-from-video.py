@@ -70,7 +70,7 @@ def main():
     pspnetpath = os.path.join(rootPath, 'pspnet-pytorch/')
     pspnetconfig = os.path.join(pspnetpath, 'config/ade20k.yaml')
     out_class_figure = os.path.join(videoPath, "Run/semseg_out_figure.png")
-    run_semseg = True
+    run_semseg = False
     #  run in a loop from the video
     cap = cv2.VideoCapture(video_filename)
     count = 1

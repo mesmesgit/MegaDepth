@@ -70,12 +70,15 @@ def main():
     pspnetpath = os.path.join(rootPath, 'pspnet-pytorch/')
     pspnetconfig = os.path.join(pspnetpath, 'config/ade20k.yaml')
     out_class_figure = os.path.join(videoPath, "Run/semseg_out_figure.png")
-    run_semseg = True
+    run_semseg = False
     #  run in a loop from the video
     cap = cv2.VideoCapture(video_filename)
     count = 1
     while True:
         try:
+            # debug
+            print(" ")
+            print("working on frame {}".format(count))
             #  read a frame from the video
             ret, frame = cap.read()
             # resize the frame to 512 x 384 for MegaDepth
@@ -83,23 +86,30 @@ def main():
             #  write the rgb frame to file
             rgbPath = os.path.join(videoPath, "Run/rgb{0:06d}.png".format(count))
             cv2.imwrite(rgbPath, frame)
+            sys.stdout.flush()
             #  perform semantic segmentation, if desired
             if run_semseg:
                 # ---- perform semantic segmentation using pspnet-pytorch ----
                 #  run semantic segmentation and get the masked image
                 masked_image = semseg.semseg(pspnetpath, pspnetconfig, rgbPath, True, True, out_class_figure)
-                # save the masked image, if 'sky' pixels found in image 
+                # save the masked image, if 'sky' pixels found in image
                 if masked_image:
+                    print("masked image returned by semseg()")
                     masked_image_path = os.path.join(videoPath, "Run/masked{0:06d}.png".format(count))
                     cv2.imwrite(masked_image_path, masked_image)
+                    sys.stdout.flush()
                     # set the input to MegaDepth
                     img_md_in = masked_image_path
                 else:
+                    print("no masked image returned by semseg()")
                     img_md_in = rgbPath
             else:
+                print("semantic segmentation not requested, using rgb image")
                 img_md_in = rgbPath
             #  create the depth image
             depthImage.generate_depth_image(img_md_in)
+            sys.stdout.flush()
+            print("depth image created")
             #
         except:
             print("End of video file reached.")

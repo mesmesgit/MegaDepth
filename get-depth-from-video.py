@@ -93,6 +93,7 @@ def main():
                 # ---- perform semantic segmentation using pspnet-pytorch ----
                 #  run semantic segmentation and get the masked image
                 masked_image = semseg.semseg(pspnetpath, pspnetconfig, rgbPath, True, True, out_class_figure)
+                print("call to semseg() is complete")
                 # save the masked image, if 'sky' pixels found in image
                 if masked_image:
                     print("masked image returned by semseg()")

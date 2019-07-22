@@ -81,8 +81,8 @@ def main():
             print("working on frame {}".format(count))
             #  read a frame from the video
             ret, frame = cap.read()
-            # resize the frame to 512 x 384 for MegaDepth
-            frame = cv2.resize(frame, (512, 384), interpolation = cv2.INTER_LANCZOS4)
+            # resize the frame to 512 x 288 to keep 16:9 for MegaDepth
+            frame = cv2.resize(frame, (512, 288), interpolation = cv2.INTER_LANCZOS4)
             #  write the rgb frame to file
             rgbPath = os.path.join(videoPath, "Run/rgb{0:06d}.png".format(count))
             cv2.imwrite(rgbPath, frame)

@@ -98,6 +98,7 @@ def main():
                     masked_image_path = os.path.join(videoPath, "Run/masked{0:06d}.png".format(count))
                     cv2.imwrite(masked_image_path, masked_image)
                     sys.stdout.flush()
+                    print("masked image written to disk")
                     # set the input to MegaDepth
                     img_md_in = masked_image_path
                 else:
@@ -107,6 +108,7 @@ def main():
                 print("semantic segmentation not requested, using rgb image")
                 img_md_in = rgbPath
             #  create the depth image
+            print("creating depth image")
             depthImage.generate_depth_image(img_md_in)
             sys.stdout.flush()
             print("depth image created")

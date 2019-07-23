@@ -25,9 +25,11 @@ from skimage.transform import resize
 
 model = create_model(opt)
 
-input_height = 288
-input_width  = 512
+# input_height = 288
+# input_width  = 512
 
+input_height = 144
+input_width  = 256
 
 def generate_depth_image(img_path, model=model):
     # make sure model is ready for depth evaluation (not training)
